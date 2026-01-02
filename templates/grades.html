@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h1>Grades</h1>
+
+  <form method="post" class="card">
+    <div class="grid3">
+      <div>
+        <label>Student</label>
+        <select name="student_id">
+          {% for s in students %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Assignment</label>
+        <select name="assignment_id">
+          {% for a in assignments %}
+            <option value="{{ a.id }}">{{ a.title }} (max {{ a.max_points }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Points Earned</label>
+        <input name="points_earned" placeholder="e.g., 95" />
+      </div>
+    </div>
+    <button type="submit">Save Grade</button>
+  </form>
+
+  <h2>Gradebook</h2>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          {% for a in assignments %}
+            <th>{{ a.title }}</th>
+          {% endfor %}
+          <th>Current %</th>
+          <th>Letter</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+          <tr>
+            <td><strong>{{ s.name }}</strong></td>
+            {% for a in assignments %}
+              {% set key = (s.id, a.id) %}
+              <td>
+                {% if key in grade_map %}
+                  {{ grade_map[key] }}
+                {% else %}
+                  <span class="muted">—</span>
+                {% endif %}
+              </td>
+            {% endfor %}
+            {% set t = (totals | selectattr("student_id", "equalto", s.id) | list) %}
+            {% if t and t[0] %}
+              <td>{{ t[0].percent }}%</td>
+              <td><span class="pill">{{ t[0].letter }}</span></td>
+            {% else %}
+              <td class="muted">—</td>
+              <td class="muted">—</td>
+            {% endif %}
+          </tr>
+        {% else %}
+          <tr><td colspan="999" class="muted">Add students + assignments first.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

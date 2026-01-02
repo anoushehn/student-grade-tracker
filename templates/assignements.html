@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h1>Assignments</h1>
+
+  <form method="post" class="card">
+    <div class="grid3">
+      <div>
+        <label>Title</label>
+        <input name="title" placeholder="e.g., Homework 1" />
+      </div>
+      <div>
+        <label>Max Points</label>
+        <input name="max_points" placeholder="e.g., 100" />
+      </div>
+      <div>
+        <label>Weight</label>
+        <input name="weight" value="1" />
+      </div>
+    </div>
+    <button type="submit">Add Assignment</button>
+    <p class="muted">Weight lets you emphasize certain assignments (e.g., tests = 2).</p>
+  </form>
+
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Max</th><th>Weight</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for a in assignments %}
+        <tr>
+          <td>{{ a.title }}</td>
+          <td>{{ a.max_points }}</td>
+          <td>{{ a.weight }}</td>
+          <td class="right">
+            <form method="post" action="{{ url_for('delete_assignment', assignment_id=a.id) }}">
+              <button class="danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4" class="muted">No assignments yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

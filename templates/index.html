@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h1>Dashboard</h1>
+  <p class="muted">Overall standing (missing grades count as 0).</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Current %</th>
+        <th>Letter</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in totals %}
+        <tr>
+          <td>{{ row.name }}</td>
+          <td>{{ row.percent }}%</td>
+          <td><span class="pill">{{ row.letter }}</span></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="3" class="muted">Add students and assignments to get started.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h1>Students</h1>
+
+  <form method="post" class="card">
+    <div class="row">
+      <label>Name</label>
+      <input name="name" placeholder="e.g., Anousheh Naqvi" />
+      <button type="submit">Add</button>
+    </div>
+  </form>
+
+  <table>
+    <thead>
+      <tr><th>Name</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+        <tr>
+          <td>{{ s.name }}</td>
+          <td class="right">
+            <form method="post" action="{{ url_for('delete_student', student_id=s.id) }}">
+              <button class="danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="2" class="muted">No students yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
